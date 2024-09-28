@@ -1,13 +1,26 @@
-const data = 'https://api.openweathermap.org/data/2.5/weather?q=Porto Alegre&appid=a510d6f748149777617549e156ce784f';
+//https://api.openweathermap.org/data/2.5/weather?q=japan&appid=af19fa1cb440a47653de8fd5d527fc63
 
-async function verificaTempo() {
+const apiKey = "af19fa1cb440a47653de8fd5d527fc63";
+const apiUrl =  "https://api.openweathermap.org/data/2.5/weather?units=metric";
+
+async function verifyWeather(){
     try {
-        const resultado = await fetch(data);
-        const dados = await resultado.json();
-        console.log(dados);
-    } catch (error) {
+        var city = "russia";
+        const response = await fetch(apiUrl + "&q="+city + '&appid='+apiKey );
+        var data = await response.json();
+        console.log(data);
+        var name = data.name
+        var temp = data.main.temp + "°C";
+        var humidity = data.main.humidity + "%";
+        var windSpeed = data.wind.speed + "km/h";
+        var weather = data.weather[0].main
+        console.log(weather);
         
+    } catch (error) {
+        console.log(error);
     }
-}   
+    
+}
 
-verificaTempo();
+
+
