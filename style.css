@@ -1,0 +1,63 @@
+body{
+    background-image: linear-gradient(#04283E,#3A4D68);
+    overflow: hidden;
+    height: 100vh;
+
+}
+
+section{
+    margin-top: 100px;
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center; */
+    display: grid;
+    grid-auto-rows: auto;
+    gap: 5px 5px;
+    background-image: linear-gradient(#024360,#2B3C45);
+    width: 417px;
+    height: 445px;
+    border-radius: 25px;
+}
+
+.weather{
+    margin: 5px;
+}
+
+.nav{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navText{
+    height: 53px;
+    width: 275px;
+    margin-right: 10px;
+    border-radius: 27px;
+    border-style: hidden;
+    font-size: large;
+
+}
+
+.navButton{
+    height: 53px;
+    width: 53px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 27px;
+    border-style: hidden;
+}
+
+.weatherData{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;    
+    align-items: center;
+    
+}
+
+.temperature{
+
+}

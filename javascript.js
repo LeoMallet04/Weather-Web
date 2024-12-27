@@ -5,7 +5,7 @@ const apiUrl =  "https://api.openweathermap.org/data/2.5/weather?units=metric";
 
 async function verifyWeather(){
     try {
-        var city = "russia";
+        var city = "moscow";
         const response = await fetch(apiUrl + "&q="+city + '&appid='+apiKey );
         var data = await response.json();
         console.log(data);
@@ -14,13 +14,18 @@ async function verifyWeather(){
         var humidity = data.main.humidity + "%";
         var windSpeed = data.wind.speed + "km/h";
         var weather = data.weather[0].main
-        console.log(weather);
+        console.log(name+ "\n" + weather +"\n" + temp + "\n" + humidity + "\n" + windSpeed);
         
     } catch (error) {
         console.log(error);
     }
     
 }
+
+function main(){
+    
+}
+
 
 
 
