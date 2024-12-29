@@ -38,28 +38,32 @@ section{
 .navText{
     height: 53px;
     width: 275px;
+    background-color: #eef7f6;
     margin-right: 10px;
     border-radius: 27px;
     border-style: hidden;
     font-size: large;
-
+    box-shadow: 0px 4px 4px 0 #0000005c;
 }
 
 .navButton{
+    
     height: 53px;
-    width: 53px;
+    width: 53px;    
+    background-color: #eef7f6;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 27px;
     border-style: hidden;
+    box-shadow: 0px 4px 4px 0 #0000005c;
 }
 
 .image{
     padding-bottom: 20px;
 }
 
-.weatherData{
+.weatherDatas{
     display: flex;
     flex-direction: row;
     justify-content: center;    
@@ -92,4 +96,8 @@ section{
     font-size: 1.5em;
     color: #FFFFFF;
     font-family: 'Fredoka',sans-serif;  
+}
+
+.navButton:hover{
+    box-shadow: 0 0 1px 2px #ffffff;
 }
