@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="javascript.js"></script>
+    <title>Weather Web</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
         <!-- <button onclick="verifyWeather()">TESTE</button> -->
 
        <center>
+
+            <div class="timer" id="timer"></div>
             <section>
                 <div class ="nav">
                     <input type="text" class="navText" id="navText">
@@ -19,22 +20,19 @@
                 
                 <div class="weather">
                     <img class="image" src="/assets/Sunday-Clear.svg" alt="">
-                    <div class="temperature">19ºC</div>
-                    <div class="location">New York</div>
+                    <div class="temperature" id="temp">19ºC</div>
+                    <div class="location" id="loc">New York</div>
 
                     <div class="weatherDatas">
                         <img src="/assets/iconegota.svg" alt="">
-                        <div class="humidity">%19</div>
+                        <div class="humidity" id="humidity">%19</div>
                         <img src="/assets/Wind.svg" alt="">
-                        <div class="wind">6.29km/h</div>
+                        <div class="wind" id="wind">6.29km/h</div>
                     </div>
                 </div>  
-                
-
-
-                
-                
+                 
             </section>
        </center> 
+       <script src="javascript.js"></script>
 </body>
 </html>
