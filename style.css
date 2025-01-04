@@ -14,7 +14,7 @@ body{
     height: 100vh;
 }
 
-section{
+.weatherSection{
     margin-top: 10px;
     /* display: flex;
     flex-direction: column;
@@ -34,6 +34,7 @@ section{
     align-items: end;
     font-size: 5em;
     color: #FFFFFF;
+    font-weight: 600;
 }
 
 .nav{
@@ -46,19 +47,19 @@ section{
 .navText{
     height: 53px;
     width: 275px;
-    background-color: #eef7f6;
+    background-color: #EBF1FD;
     margin-right: 10px;
     border-radius: 27px;
     border-style: hidden;
     font-size: large;
-    box-shadow: 0px 4px 4px 0 #0000005c;
+    box-shadow: 0px 4px 6px 0 #0000005c;
 }
 
 .navButton{
     
     height: 53px;
     width: 53px;    
-    background-color: #eef7f6;
+    background-color: #EBF1FD;
     display: flex;
     justify-content: center;
     align-items: center;

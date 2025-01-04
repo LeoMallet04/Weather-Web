@@ -1,77 +1,186 @@
 //https://api.openweathermap.org/data/2.5/weather?q=japan&appid=af19fa1cb440a47653de8fd5d527fc63
 const apiKey = "af19fa1cb440a47653de8fd5d527fc63";
 const apiUrl =  "https://api.openweathermap.org/data/2.5/weather?units=metric";
+var currentTimer = null;
 
 async function getWeather(){
     const input = document.getElementById('navText').value;
-    let data = await verifyWeather(input);
-    let loc = data.name;
+    const url = `${apiUrl}&q=${input}&appid=${apiKey}&_=${Date.now()}`;
+    let data = await verifyWeather(url);
+
+    if(!data || !data.dt || !data.timezone){
+        alert("Error obtaining meteorological data");
+        return;
+    }
+    let loc = data.name +"";
     let temp = data.main.temp + "°C";
     let humidity = data.main.humidity + "%";
     let windSpeed = data.wind.speed + "km/h";
     let weather = data.weather[0].main;
-    let clock
-    alert(data.dt);
-    //alert(loc+ "\n" + weather +"\n" + temp + "\n" + humidity + "\n" + windSpeed + "\n");
 
-    if(document.getElementById('timer').innerHTML == ""){
-        clock = convertTimezonetoTime(data.dt, data.timezone);
-    }       
-    if(document.getElementById('timer').innerHTML != "" && document.getElementById('navText').value != loc){
-        clock = convertTimezonetoTime(data.dt, data.timezone);
+   
+    if(currentTimer){
+        clearInterval(currentTimer);
+        currentTimer = null;
     }
+    
+    let dateObj = new Date(data.dt * 1000);
+    let timezoneOffset = (data.timezone / 3600);
 
-    
-    
-  
-    alterData(loc,temp,humidity,windSpeed);
-    Promise.all(clock);
+    let formatedHour = formateTime(dateObj.getUTCHours() + timezoneOffset);
+
+    clock(dateObj,timezoneOffset);
+
+    alterData(loc,temp,humidity,windSpeed, weather, formatedHour);
 }
 
 
-async function alterData(loc, temp, humidity, windSpeed){
+async function alterData(loc, temp, humidity, windSpeed, weather, currentHour){
+    let background = document.body;
+    let weatherSection = document.getElementById('weatherSection');
+    let image = document.getElementById('image');
+
     document.getElementById('loc').innerHTML = loc;
     document.getElementById('temp').innerHTML = temp;
     document.getElementById('humidity').innerHTML = humidity;
     document.getElementById('wind').innerHTML = windSpeed;
+    let timeOption = discoverLocalTime(parseInt(currentHour));
+
+
+    // weather = "Haze";   
+    // timeOption = "Night";
+
+    if(weather == "Drizzle") weather = "Rain";
+    if(weather == "Haze" || weather == "Smoke" || weather == "Fog" || weather == "Dust") weather = "Mist";
+    switch (weather) {
+        case "Clear":
+            if(timeOption == "Day"){
+                background.style.backgroundImage = 'linear-gradient(to top,#FFFFFF,#5CC2FD)';
+                weatherSection.style.backgroundImage = 'linear-gradient(#D9EAF4,#5EB8ED)';
+                image.src = "/assets/Sunday-Clear.svg";
+                
+            }
+            if(timeOption == "Night"){
+                background.style.backgroundImage = 'linear-gradient(to top,#0C6AA0,#000304)';
+                weatherSection.style.backgroundImage = 'linear-gradient(#06527E,#1D1B1B)';
+                image.src = "/assets/MoonNight-Clear.svg";
+            }
+
+            break;
+        
+        case "Clouds":
+            if(timeOption == "Day"){
+                background.style.backgroundImage = 'linear-gradient(to top,#9BB5C5,#435356)';
+                weatherSection.style.backgroundImage = 'linear-gradient(#BEE6EF,#303F4E)';
+                image.src = "assets/CloudyDay.svg";
+            }
+            if(timeOption == "Night"){
+                background.style.backgroundImage = 'linear-gradient(to top,#49555C,#000000)';
+                weatherSection.style.backgroundImage = 'linear-gradient(#8D95A8,#161621)';
+                image.src = "assets/CloudyNight.svg";
+            }
+        
+            break;
+
+        case "Rain":
+            if(timeOption == "Day"){
+                background.style.backgroundImage = 'linear-gradient(to top,#B2D0DD,#075980)';
+                weatherSection.style.backgroundImage = 'linear-gradient(#86B1CA,#005C91)';
+                image.src = "assets/RainDay.svg";
+            }
+            if(timeOption == "Night"){
+                background.style.backgroundImage = 'linear-gradient(to top,#000681,#000000)';
+                weatherSection.style.backgroundImage = 'linear-gradient(#015382,#08113F)';
+                image.src = "assets/RainNight.svg";
+            }
+            
+            break;
+
+        case "Thunderstorm":
+            if(timeOption == "Day"){
+                background.style.backgroundImage = 'linear-gradient(to top,#7E6ECF,#02167A)';
+                weatherSection.style.backgroundImage = 'linear-gradient(#9C90F0,#142C98)';
+                image.src = "assets/Storm.svg";
+            }
+            if(timeOption == "Night"){
+                background.style.backgroundImage = 'linear-gradient(to top,#2F3352,#000000)';
+                weatherSection.style.backgroundImage = 'linear-gradient(#33394C,#000000)';
+                image.src = "assets/Storm.svg";
+            }
+            
+            break;
+
+        case "Snow":
+            background.style.backgroundImage = 'linear-gradient(to top,#FFFFFF,#00A2FF)';
+            weatherSection.style.backgroundImage = 'linear-gradient(#D6F0FF,#00AEFF)';
+            image.src = "assets/Snowing.svg";
+
+            break;
+
+        case "Mist":
+            background.style.backgroundImage = 'linear-gradient(to top,#DDE8EB,#6F99A3)';
+            weatherSection.style.backgroundImage = 'linear-gradient(#ADD3D5,#65AFB5 )';
+            image.src = "assets/HazeMist.svg";
+
+            break;
+        default:
+        break;
+    }
 }
 
 
-async function verifyWeather(str){
+async function verifyWeather(url){
     try {
-        let response = await fetch(apiUrl + "&q="+str+ "&appid="+apiKey );
-        var data = await response.json();
-        return data;
+        let response = await fetch(url);
+        if(!response.ok){
+            throw new Error(`Error on the requisition: ${response.status}`);
+        }
+        return await response.json();
     } catch (error) {
         console.log(error);
     }
     
 }
 
+async function clock(dateObj, timezoneOffset) {
 
-async function convertTimezonetoTime(dt, timezone) {
-    let dateObj = new Date(dt * 1000);
-    console.log("DT INICIAL: "+dt);
-    let timezoneOffset = (timezone / 3600);
-
-    while(true){
-        console.log("DT ATUALIZADO:" +dt);
-        dateObj.setSeconds(dateObj.getSeconds() +1);    
-
-        let currentHour = dateObj.getUTCHours() + timezoneOffset;
-        let currentMinutes = dateObj.getUTCMinutes();
-        let currentSeconds = dateObj.getUTCSeconds();
-
-        if (currentHour >= 24) currentHour -= 24;
-        if (currentHour < 0) currentHour += 24;
-
-        let formatedHour = currentHour.toString().padStart(2,'0');
-        let formatedMinutes = currentMinutes.toString().padStart(2,'0');
-        let formatedSeconds = currentSeconds.toString().padStart(2,'0');
+    if(currentTimer == null){
+        currentTimer = setInterval(() => {
+            
+            dateObj.setSeconds(dateObj.getSeconds() +1);    
     
-        let currentTime = `${formatedHour}:${formatedMinutes}:${formatedSeconds}`;
-        document.getElementById('timer').innerHTML = currentTime;
-
-        await new Promise((resolve) => setTimeout(resolve, 1000)); 
+            let currentHour = dateObj.getUTCHours() + timezoneOffset;
+            let currentMinutes = dateObj.getUTCMinutes();
+            let currentSeconds = dateObj.getUTCSeconds();
+    
+            if (currentHour >= 24) currentHour -= 24;
+            if (currentHour < 0) currentHour += 24;
+    
+            let formatedHour = formateTime(currentHour);
+            let formatedMinutes = formateTime(currentMinutes);
+            let formatedSeconds = formateTime(currentSeconds);
+        
+            let currentTime = `${formatedHour}:${formatedMinutes}:${formatedSeconds}`;
+            document.getElementById('timer').innerHTML = currentTime;
+            
+        },1000);
     }
+}
+
+function discoverLocalTime(currentHour){
+    let option = "";
+
+    if(currentHour >= 6 && currentHour <= 19){
+        option = "Day";
+    }
+    if(currentHour < 6 && currentHour > 19){
+        option = "Night";
+    }
+    return option;
+}
+
+function formateTime(time){
+    let formatedTime = time.toString().padStart(2,'0');
+
+    return formatedTime;
 }
