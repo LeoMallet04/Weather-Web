@@ -4,34 +4,47 @@ const apiUrl =  "https://api.openweathermap.org/data/2.5/weather?units=metric";
 var currentTimer = null;
 
 async function getWeather(){
-    const input = document.getElementById('navText').value;
+    const navText = document.getElementById('navText');
+    const input = navText.value;
     const url = `${apiUrl}&q=${input}&appid=${apiKey}&_=${Date.now()}`;
+    
+    alert(url);
     let data = await verifyWeather(url);
 
+    let currentCity = document.getElementById('loc').innerHTML;
+
+    defaultNavText(navText);
+
     if(!data || !data.dt || !data.timezone){
-        alert("Error obtaining meteorological data");
+            navText.style.backgroundColor = "#DD210F";
+            navText.style.color = "#FFFFFF";
+            navText.placeholder = "This city doesn't exist...";
         return;
     }
+    
     let loc = data.name +"";
     let temp = data.main.temp + "°C";
     let humidity = data.main.humidity + "%";
     let windSpeed = data.wind.speed + "km/h";
     let weather = data.weather[0].main;
 
-   
-    if(currentTimer){
-        clearInterval(currentTimer);
-        currentTimer = null;
-    }
+    if(currentCity != loc){
+
+        if(currentTimer){
+            clearInterval(currentTimer);
+            currentTimer = null;
+        }
+
+        let dateObj = new Date(data.dt * 1000);
+        let timezoneOffset = (data.timezone / 3600);
     
-    let dateObj = new Date(data.dt * 1000);
-    let timezoneOffset = (data.timezone / 3600);
-
-    let formatedHour = formateTime(dateObj.getUTCHours() + timezoneOffset);
-
-    clock(dateObj,timezoneOffset);
-
-    alterData(loc,temp,humidity,windSpeed, weather, formatedHour);
+        let formatedHour = formateTime(dateObj.getUTCHours() + timezoneOffset);
+    
+        clock(dateObj,timezoneOffset);
+    
+        alterData(loc,temp,humidity,windSpeed, weather, formatedHour);
+    }
+ 
 }
 
 
@@ -39,19 +52,33 @@ async function alterData(loc, temp, humidity, windSpeed, weather, currentHour){
     let background = document.body;
     let weatherSection = document.getElementById('weatherSection');
     let image = document.getElementById('image');
+    let weatherImg = document.querySelectorAll('.weatherImg');
+
+    image.style.display = 'initial';
+
+    weatherImg.forEach(img => {
+        img.style.display = 'initial';
+    });
 
     document.getElementById('loc').innerHTML = loc;
     document.getElementById('temp').innerHTML = temp;
     document.getElementById('humidity').innerHTML = humidity;
     document.getElementById('wind').innerHTML = windSpeed;
+
     let timeOption = discoverLocalTime(parseInt(currentHour));
+    
+    alert(weather);
+    alert(timeOption);
+
+    if(weather == "Drizzle"){
+        weather = "Rain";
+    } 
+    if(weather == "Haze" || weather == "Smoke" || weather == "Fog" || weather == "Dust" 
+        || weather == "Sand" || weather == "Ash" || weather == "Squall" || weather == "Tornado"){
+        weather = "Mist";
+    }
 
 
-    // weather = "Haze";   
-    // timeOption = "Night";
-
-    if(weather == "Drizzle") weather = "Rain";
-    if(weather == "Haze" || weather == "Smoke" || weather == "Fog" || weather == "Dust") weather = "Mist";
     switch (weather) {
         case "Clear":
             if(timeOption == "Day"){
@@ -167,13 +194,13 @@ async function clock(dateObj, timezoneOffset) {
     }
 }
 
-function discoverLocalTime(currentHour){
+function discoverLocalTime(currentHour) {
     let option = "";
 
-    if(currentHour >= 6 && currentHour <= 19){
+    if (currentHour >= 6 && currentHour <= 19) {
         option = "Day";
     }
-    if(currentHour < 6 && currentHour > 19){
+    if (currentHour < 6 || currentHour > 19) {
         option = "Night";
     }
     return option;
@@ -183,4 +210,11 @@ function formateTime(time){
     let formatedTime = time.toString().padStart(2,'0');
 
     return formatedTime;
+}
+
+
+function defaultNavText(navText){
+    navText.style.backgroundColor = "#EBF1FD";
+    navText.style.color = "#252a2ddd";
+    navText.placeholder = "Type the desired city...";
 }

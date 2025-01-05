@@ -38,25 +38,27 @@ body{
 }
 
 .nav{
+    margin-top: 20px;
     width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: start;
 }
 
 .navText{
     height: 53px;
     width: 275px;
     background-color: #EBF1FD;
+    color: #252a2ddd;
     margin-right: 10px;
     border-radius: 27px;
     border-style: hidden;
     font-size: large;
+    padding-left: 10px;
     box-shadow: 0px 4px 6px 0 #0000005c;
 }
 
 .navButton{
-    
     height: 53px;
     width: 53px;    
     background-color: #EBF1FD;
@@ -68,8 +70,15 @@ body{
     box-shadow: 0px 4px 4px 0 #0000005c;
 }
 
+.navButtonImg{
+    display:initial;
+}
+
 .image{
     padding-bottom: 20px;
+    width: 100px;
+    height: 100px;
+    display: none;
 }
 
 .weatherDatas{
@@ -77,7 +86,8 @@ body{
     flex-direction: row;
     justify-content: center;    
     align-items: center;
-    
+    height: 48px;
+    width: 100%;
 }
 
 .temperature{
@@ -92,6 +102,8 @@ body{
    color: #FFFFFF;
    font-weight: 100;
    font-family: 'Fredoka',sans-serif;
+   height: 55.2px;
+   width: 100%;
 }
 
 .humidity{
@@ -99,14 +111,21 @@ body{
     color: #FFFFFF;
     font-family: 'Fredoka',sans-serif;
     margin-right: 60px;
+    margin-left: 4px;
+
 }
 
 .wind{
     font-size: 1.5em;
     color: #FFFFFF;
     font-family: 'Fredoka',sans-serif;  
+    margin-left: 4px;
 }
 
 .navButton:hover{
     box-shadow: 0 0 1px 2px #ffffff;
+}
+
+.weatherImg{
+    display: none;
 }
