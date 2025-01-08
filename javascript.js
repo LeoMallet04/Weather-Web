@@ -65,9 +65,6 @@ async function alterData(loc, temp, humidity, windSpeed, weather, currentHour){
     document.getElementById('wind').innerHTML = windSpeed;
 
     let timeOption = discoverLocalTime(parseInt(currentHour));
-    
-    alert(weather);
-    alert(timeOption);
 
     if(weather == "Drizzle"){
         weather = "Rain";
