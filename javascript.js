@@ -8,14 +8,13 @@ async function getWeather(){
     const input = navText.value;
     const url = `${apiUrl}&q=${input}&appid=${apiKey}&_=${Date.now()}`;
     
-    alert(url);
     let data = await verifyWeather(url);
 
     let currentCity = document.getElementById('loc').innerHTML;
 
     defaultNavText(navText);
 
-    if(!data || !data.dt || !data.timezone){
+    if(!data){
             navText.style.backgroundColor = "#DD210F";
             navText.style.color = "#FFFFFF";
             navText.placeholder = "This city doesn't exist...";
