@@ -1,5 +1,4 @@
-//https://api.openweathermap.org/data/2.5/weather?q=japan&appid=af19fa1cb440a47653de8fd5d527fc63
-const apiKey = "af19fa1cb440a47653de8fd5d527fc63";
+https://api.openweathermap.org/data/2.5/weather?q=japanappid=af19fa1cb440a47653de8fd5d527fc63
 const apiUrl =  "https://api.openweathermap.org/data/2.5/weather?units=metric";
 var currentTimer = null;
 

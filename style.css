@@ -91,14 +91,14 @@ body{
 }
 
 .temperature{
-    font-size: 3em;
+    font-size: 2.8em;
     font-weight: 500;
     color: #FFFFFF;
     font-family:sans-serif;
 }
 
 .location{
-   font-size: 2.5em;
+   font-size: 2.1em;
    color: #FFFFFF;
    font-weight: 100;
    font-family: 'Fredoka',sans-serif;
